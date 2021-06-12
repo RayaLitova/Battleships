@@ -44,14 +44,49 @@ struct tile_t **create_empty_map(){
 }
 
 void create_map(){
-	struct tile_t ***map=create_empty_map();
-}
-void load_template(player){
-	struct tile_t ***map=create_empty_map();
+	int **map=create_empty_map(map_size);
+	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
+	int shipcount = 10, currship = 0, flag = 0;
+	for(int go=0;go!=4;){
+		if(shipcount!=0){
+			printf("Place ship - %d(1)\n", shipcount);
+		}
+		printf("Move ship(2)\nSee board(3)\nReady(4)\n");
+		scanf("%d", &go);
+		if(go==1 && shipcount!= 0){
+			printf("Choose ship type(2,3,4,6)");
+			scanf("%d",&currship);
+			for(int i=0; i<shipcount-1;i++){
+				if(currship==ships[i]){
+					ships[i] = 0;
+					flag = 1;
+					break;
+					
+				}
+			}
+			if(flag==0) printf("You dont have any of that kind left\n");
+			else{
+				flag=0;
+				shipcount--;
+			}
+		}
+		else if(go==2){
+
+		}
+		else if(go==3){
+			//print_map();
+		}
+		else if(go!=4) printf("Invalid command\n");
+			
+		}
+	}
+
+void load_template(int player){
+	int **map=create_empty_map(map_size);
 	//load from {player} file
 }
 void random_map(){
-	struct tile_t ***map=create_empty_map();
+	struct tile_t **map=create_empty_map();
 }
 
 void choose_map(int player){
