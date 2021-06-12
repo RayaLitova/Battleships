@@ -1,7 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define map_size 100
+
+struct tile_t{
+	int value;
+	char symbol;
+};
+
+int print_map(struct tile_t** map){
+	printf("   ");
+	for(int i=0;i<sqrt(map_size);i++){
+		printf(" %d |", i);
+	}
+	for(int i=0;i<sqrt(map_size);i++){
+		printf("\n   --- --- --- --- --- --- --- --- --- ---\n");
+		printf("%c |", 'A'+i);
+		for(int j=0;j<sqrt(map_size);j++){
+			printf(" %c |", map[i][j].symbol);
+		}
+	}
+	printf("\n");
+}
 
 void choose_difficulty(){
 	printf("Easy(1)\nHard(2)\nInsane(3)\nRandom(4)\n");
@@ -9,23 +30,28 @@ void choose_difficulty(){
 	scanf("%d", &diff);
 }
 
-int **create_empty_map(int size){
-	int **new_map=malloc(size*sizeof(int*));
-	for(int i=0; i<size; i++){
-		new_map[i]=0;
+struct tile_t **create_empty_map(){
+	struct tile_t **new_map=malloc(map_size*sizeof(struct tile_t*));
+	for(int i=0;i<sqrt(map_size);i++){
+		new_map[i]=malloc(sqrt(map_size)*sizeof(struct tile_t));
+		for(int j=0;j<sqrt(map_size);j++){
+			new_map[i][j].value=0;
+			new_map[i][j].symbol=' ';
+		}
+		
 	}
 	return new_map;
 }
 
 void create_map(){
-	int **map=create_empty_map(map_size);
+	struct tile_t ***map=create_empty_map();
 }
 void load_template(player){
-	int **map=create_empty_map(map_size);
+	struct tile_t ***map=create_empty_map();
 	//load from {player} file
 }
 void random_map(){
-	int **map=create_empty_map(map_size);
+	struct tile_t ***map=create_empty_map();
 }
 
 void choose_map(int player){
@@ -58,5 +84,6 @@ void game_start(){
 }
 
 int main(){
-	game_start();
+	struct tile_t** map=create_empty_map();
+	print_map(map);
 }
