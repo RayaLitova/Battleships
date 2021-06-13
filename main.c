@@ -106,7 +106,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 					return 0;
 				}
 			}
-			if(y==0||y==9)chy=y;
+			if(y==0)chy=y;
 			else chy=y-1;
 		}
 	}
@@ -116,9 +116,9 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		if(y==0)chy=y;
 		else chy=y-1;
 		if(x+2>10)maxX=10;
-		else maxX = x+type+1;
+		else maxX = x+2;
 		if(y+type+1>10)maxY=10;
-		else maxY = y+2;
+		else maxY = y+type+1;
 		for(;chx<maxX;chx++){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
@@ -126,7 +126,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 					return 0;
 				}
 			}
-			if(y==0||y==9)chy=y;
+			if(y==0)chy=y;
 			else chy=y-1;
 		}
 	}
@@ -137,7 +137,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		else chy=y+1;
 		if(x+2>10)maxX=10;
 		else maxX = x+2;
-		if(y-type-1<-1)maxY=10;
+		if(y-type-1<-1)maxY=-1;
 		else maxY = y-type-1;
 		for(;chx<maxX;chx++){
 			for(;chy>maxY;chy--){
@@ -146,7 +146,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 					return 0;
 				}
 			}
-			if(y==0||y==9)chy=y;
+			if(y==9)chy=y;
 			else chy=y+1;
 		}
 	}
@@ -256,7 +256,7 @@ void create_map(){
 			int trY, trX;
 			printf("Choose ship to move\n");
 			do{
-				printf("Choose position(a1,B2,..) ");
+				printf("Enter the starting or ending position of a ship(a1,B2,..) ");
 				char help_c;
 				scanf(" %c", &help_c);
 				if(help_c>96) x = help_c-97;
@@ -276,7 +276,6 @@ void create_map(){
 			position_ship(&trX,&trY,&direction);
 			if(is_suitable(trX,trY,direction,map[y][x].value,map)== 0) goto reposition;
 			else place_ship(trX,trY,direction,map[y][x].value,map);
-			printf("crassh test");
 			delete_ship(x,y,map);
 
 		}else if(go==3){
