@@ -10,14 +10,18 @@ struct tile_t{
 };
 
 int print_map(struct tile_t** map){
-	printf("   ");
+	printf("   |");
 	for(int i=0;i<sqrt(map_size);i++){
 		printf(" %c |", 'A'+i);
 		
 	}
 	for(int i=0;i<sqrt(map_size);i++){
-		printf("\n   --- --- --- --- --- --- --- --- --- ---\n");
-		printf(" %d |", i+1);
+		printf("\n    --- --- --- --- --- --- --- --- --- ---\n");
+		if(i+1!=10){
+			printf(" %d |", i+1);
+		}else{
+			printf("%d |", i+1);
+		}
 		for(int j=0;j<sqrt(map_size);j++){
 			printf(" %c |", map[i][j].symbol);
 		}
@@ -46,7 +50,7 @@ struct tile_t **create_empty_map(){
 
 void position_ship(int* x, int* y, char* direction){
 	do{
-		printf("Choose position(a1,B2,..)");
+		printf("Choose position(A1,B2,..)\n");
 		char help_c;
 		scanf(" %c", &help_c);
 		if(help_c>96) *x = help_c-97;
@@ -82,7 +86,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx<maxX;chx++){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect\n");
+					printf("Ships too close to each other, they might crash. Please redirect. \n");
 					return 0;
 				}
 			}
@@ -102,7 +106,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx>maxX;chx--){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect\n");
+					printf("Ships too close to each other, they might crash. Please redirect. \n");
 					return 0;
 				}
 			}
@@ -122,7 +126,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx<maxX;chx++){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect\n");
+					printf("Ships too close to each other, they might crash. Please redirect. \n");
 					return 0;
 				}
 			}
@@ -142,7 +146,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx<maxX;chx++){
 			for(;chy>maxY;chy--){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect\n");
+					printf("Ships too close to each other, they might crash. Please redirect. \n");
 					return 0;
 				}
 			}
@@ -228,7 +232,7 @@ void create_map(){
 		printf("Move ship(2)\nSee board(3)\nReady(4)\n");
 		scanf("%d", &go);
 		if(go==1 && shipcount!= 0){
-			printf("Choose ship type(2,3,4,6)");
+			printf("Choose ship type(2,3,4,6) ");
 			scanf("%d",&currship);
 			for(int i=0; i<10;i++){
 				if(currship==ships[i]){
@@ -237,7 +241,7 @@ void create_map(){
 				}
 			}
 			if(flag==0||currship==0){
-				printf("You dont have any of that kind left\n");
+				printf("You dont have any of that kind left!\n");
 			}else{
 				position_ship(&x,&y,&direction);
 				if(is_suitable(x,y,direction,currship,map)== 0) goto reposition;
@@ -256,7 +260,7 @@ void create_map(){
 			int trY, trX;
 			printf("Choose ship to move\n");
 			do{
-				printf("Enter the starting or ending position of a ship(a1,B2,..) ");
+				printf("Enter the starting or ending position of a ship(A1,B2,..) ");
 				char help_c;
 				scanf(" %c", &help_c);
 				if(help_c>96) x = help_c-97;
@@ -269,10 +273,10 @@ void create_map(){
 			}
 			while(y<0||y>9||x<0||x>9);
 			if(map[y][x].value==0){
-				printf("There is no ship at that position.Relocate the ship\n");
+				printf("There is no ship at that position. Relocate the ship!\n");
 				goto reposition;
 			}
-			printf("Move to:\n");
+			printf("Move to: ");
 			position_ship(&trX,&trY,&direction);
 			if(is_suitable(trX,trY,direction,map[y][x].value,map)== 0) goto reposition;
 			else place_ship(trX,trY,direction,map[y][x].value,map);
@@ -281,7 +285,7 @@ void create_map(){
 		}else if(go==3){
 			print_map(map);
 		}else if(go!=4){
-			printf("Invalid command\n");
+			printf("Invalid command!\n");
 		}
 	}
 }
