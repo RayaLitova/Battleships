@@ -1,10 +1,8 @@
 #include "defines.h"
 
-void play(){
-	struct tile_t **map_A=create_empty_map();
-	struct tile_t **map_B=create_empty_map();
-
-}
+ 
+extern struct tile_t **map_A_base;
+extern struct tile_t **map_B_base;
 
 int print_map(struct tile_t** map){
 	printf("   |");
@@ -33,11 +31,11 @@ void choose_difficulty(){
 }
 
 
-void load_template(int player){
+struct tile_t** load_template(int player){
 	struct tile_t  **map=create_empty_map();
 	//load from {player} file
 }
-void random_map(){
+struct tile_t** random_map(){
 	struct tile_t **map=create_empty_map();
 }
 
@@ -47,11 +45,14 @@ void choose_map(int player){
 	int map;
 	scanf("%d", &map);
 	if(map==1){
-		create_map(player);
+		if(player==1) map_A_base=create_map();
+		else map_B_base=create_map();
 	}else if(map==2){
-		load_template(player);
+		if(player==1) map_A_base=load_template(1);
+		else map_B_base=load_template(2);
 	}else{
-		random_map(player);
+		if(player==1) map_A_base=random_map();
+		else map_B_base=random_map();
 	};
 }
 

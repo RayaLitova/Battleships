@@ -6,5 +6,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "map_create.h"
+#include "gameplay.h"
 
 #endif

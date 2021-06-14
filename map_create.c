@@ -184,7 +184,7 @@ void delete_ship(int x, int y, struct tile_t** map){
 	}
 }
 
-void create_map(int player){
+struct tile_t** create_map(){
 	struct tile_t **map=create_empty_map();
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
 	int shipcount = 10, currship = 0, flag = 0, x=0, y=0;
@@ -253,4 +253,5 @@ void create_map(int player){
 			printf("Invalid command!\n");
 		}
 	}
+	return map;
 }

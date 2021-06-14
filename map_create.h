@@ -19,7 +19,7 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map);
 
 void delete_ship(int x, int y, struct tile_t** map);
 
-void create_map(int player);
+struct tile_t ** create_map();
 
 
 #endif
