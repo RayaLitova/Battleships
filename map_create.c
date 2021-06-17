@@ -119,6 +119,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 			else chy=y+1;
 		}
 	}
+	return 1;
 }
 
 void place_ship(int x, int y, char direction, int type, struct tile_t** map){
@@ -184,6 +185,24 @@ void delete_ship(int x, int y, struct tile_t** map){
 	}
 }
 
+int check_ship(int x, int y, struct tile_t** map){
+	int help=0;
+	if(x!=9){
+		if(map[y][x+1].value!=0) help++;
+	}
+	if(x!=0){
+		if(map[y][x-1].value!=0) help++;
+	}
+	if(y!=9){
+		if(map[y+1][x].value!=0) help++;
+	}
+	if(y!=0){
+		if(map[y-1][x].value!=0) help++;
+	}
+	if(help>1) return 0;
+	return 1;
+}
+
 struct tile_t** create_map(){
 	struct tile_t **map=create_empty_map();
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
@@ -237,7 +256,7 @@ struct tile_t** create_map(){
 				if(y<0||y>9)printf("No such y\n");
 			}
 			while(y<0||y>9||x<0||x>9);
-			if(map[y][x].value==0){
+			if(map[y][x].value==0||check_ship(x,y,map)==0){
 				printf("There is no ship at that position. Relocate the ship!\n");
 				goto reposition;
 			}
