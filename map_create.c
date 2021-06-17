@@ -256,8 +256,12 @@ struct tile_t** create_map(){
 				if(y<0||y>9)printf("No such y\n");
 			}
 			while(y<0||y>9||x<0||x>9);
-			if(map[y][x].value==0||check_ship(x,y,map)==0){
+			if(map[y][x].value==0){
 				printf("There is no ship at that position. Relocate the ship!\n");
+				goto reposition;
+			}
+			if(check_ship(x,y,map)==0){
+				printf("Can't maintain a conection with the ship. Reestablish the connection!\n");
 				goto reposition;
 			}
 			printf("Move to: ");
