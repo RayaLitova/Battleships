@@ -213,7 +213,10 @@ struct tile_t** create_map(){
 		if(shipcount!=0){
 			printf("Place ship - %d(1)\n", shipcount);
 		}
-		printf("Move ship(2)\nSee board(3)\nReady(4)\n");
+		printf("Move ship(2)\nSee board(3)\n");
+		if(shipcount!=0){
+			printf("Ready(4)\n");
+		}
 		scanf("%d", &go);
 		if(go==1 && shipcount!= 0){
 			printf("Choose ship type(2,3,4,6) ");
