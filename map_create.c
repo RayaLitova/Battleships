@@ -206,7 +206,7 @@ int check_ship(int x, int y, struct tile_t** map){
 struct tile_t** create_map(){
 	struct tile_t **map=create_empty_map();
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
-	int shipcount = 10, currship = 0, flag = 0, x=0, y=0;
+	int shipcount = 10, currship = 0, flag = 0, x=0, y=0, deffence=0;
 	char direction;
 	for(int go=0;go!=4;){
 		reposition:
@@ -214,8 +214,13 @@ struct tile_t** create_map(){
 			printf("Place ship - %d(1)\n", shipcount);
 		}
 		printf("Move ship(2)\nSee board(3)\n");
-		if(shipcount!=0){
+		if(shipcount==0){
 			printf("Ready(4)\n");
+			deffence =1;
+		}
+		if(deffence==1){
+			printf("The board is not ready yet\n");
+			goto reposition;
 		}
 		scanf("%d", &go);
 		if(go==1 && shipcount!= 0){
