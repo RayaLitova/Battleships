@@ -28,14 +28,40 @@ void position_ship(int* x, int* y, char* direction){
 		scanf("%d", y);
 		*y-=1;
 		if(*x<0||*x>9) printf("No such x\n");
-		if(*y<0||*y>9)printf("No such y\n");
+		if(*y<0||*y>9) printf("No such y\n");
 	}
 	while(*y<0||*y>9||*x<0||*x>9);
 	do{
 		printf("Choose direction Up(u), Down(d), Left(l), Right(r)\n");
+		printf("%s\n", direction);
 		scanf(" %c", direction);
-		if(*direction!='d'&&*direction!='u'&&*direction!='l'&&*direction!='r') printf("No such direction\n");
-	}while(*direction!='d'&&*direction!='u'&&*direction!='l'&&*direction!='r');
+		printf("%s\n", direction);
+		if(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r') printf("No such direction\n");
+	}while(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r');
+}
+
+void ships_change(int x, int y, int type, int endx, int endy, char direction){
+	printf("cc");
+    if(pl==1){
+        ships_A[sizeA].startx=x;
+        ships_A[sizeA].starty=y;
+        ships_A[sizeA].endx=endx;
+        ships_A[sizeA].endy=endy;
+        ships_A[sizeA].type=type;
+        ships_A[sizeA].hit=0;
+        ships_A[sizeA].direction=direction;
+        sizeA++;
+    }else{
+        ships_B[sizeB].startx=x;
+        ships_B[sizeB].starty=y;
+        ships_B[sizeB].endx=endx;
+        ships_B[sizeB].endy=endy;
+        ships_B[sizeB].type=type;
+        ships_B[sizeB].hit=0;
+        ships_B[sizeB].direction=direction;
+        sizeB++;
+    }
+
 }
 
 int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
@@ -85,6 +111,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		}
 	}
 	if(direction=='d'){
+		printf("aa");
 		if(x==0)chx=x;
 		else chx=x-1;
 		if(y==0)chy=y;
@@ -124,59 +151,39 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 			else chy=y+1;
 		}
 	}
+	return 1;
 }
 
-void ships_change(int x, int y, int type, int endx, int endy, char direction){
-	if(pl==1){
-		ships_A[sizeA].startx=x;
-		ships_A[sizeA].starty=y;
-		ships_A[sizeA].endx=endx;
-		ships_A[sizeA].endy=endy;
-		ships_A[sizeA].type=type;
-		ships_A[sizeA].hit=0;
-		ships_A[sizeA].direction=direction;
-		sizeA++;
-	}else{
-		ships_B[sizeB].startx=x;
-		ships_B[sizeB].starty=y;
-		ships_B[sizeB].endx=endx;
-		ships_B[sizeB].endy=endy;
-		ships_B[sizeB].type=type;
-		ships_B[sizeB].hit=0;
-		ships_B[sizeB].direction=direction;
-		sizeB++;
-	}
-
-}
 void place_ship(int x, int y, char direction, int type, struct tile_t** map){
-	if(direction=='r'){
-		for(int chx=x;chx<x+type;chx++){
-			map[y][chx].value=type;
-			map[y][chx].symbol='X';
-		}
-		ships_change(x,y,type,x+type-1,y,direction);
-	}
-	if(direction=='l'){
-		for(int chx=x;chx>x-type;chx--){
-			map[y][chx].value=type;
-			map[y][chx].symbol='X';
-		}
-		ships_change(x,y,type,x-type-1,y,direction);
-	}
-	if(direction=='d'){
-		for(int chy=y;chy<y+type;chy++){
-			map[chy][x].value=type;
-			map[chy][x].symbol='X';
-		}
-		ships_change(x,y,type,x,y+type-1,direction);
-	}
-	if(direction=='u'){
-		for(int chy=y;chy>y-type;chy--){
-			map[chy][x].value=type;
-			map[chy][x].symbol='X';
-		}
-		ships_change(x,y,type,x,y-type-1,direction);
-	}
+    if(direction=='r'){
+        for(int chx=x;chx<x+type;chx++){
+            map[y][chx].value=type;
+            map[y][chx].symbol='X';
+        }
+        ships_change(x,y,type,x+type-1,y,direction);
+    }
+    if(direction=='l'){
+        for(int chx=x;chx>x-type;chx--){
+            map[y][chx].value=type;
+            map[y][chx].symbol='X';
+        }
+        ships_change(x,y,type,x-type-1,y,direction);
+    }
+    if(direction=='d'){
+    	printf("bb");
+        for(int chy=y;chy<y+type;chy++){
+            map[chy][x].value=type;
+            map[chy][x].symbol='X';
+        }
+        ships_change(x,y,type,x,y+type-1,direction);
+    }
+    if(direction=='u'){
+        for(int chy=y;chy>y-type;chy--){
+            map[chy][x].value=type;
+            map[chy][x].symbol='X';
+        }
+        ships_change(x,y,type,x,y-type-1,direction);
+    }
 }
 
 void delete_ship(int x, int y, struct tile_t** map){
@@ -215,20 +222,43 @@ void delete_ship(int x, int y, struct tile_t** map){
 	}
 }
 
-struct tile_t** create_map(int player){
-	ships_A=malloc(sizeof(struct ship_t)*10);
-	ships_B=malloc(sizeof(struct ship_t)*10);
-	pl=player;
+int check_ship_a(int x, int y, struct tile_t** map){
+	int help=0;
+	if(x!=9){
+		if(map[y][x+1].value!=0) help++;
+	}
+	if(x!=0){
+		if(map[y][x-1].value!=0) help++;
+	}
+	if(y!=9){
+		if(map[y+1][x].value!=0) help++;
+	}
+	if(y!=0){
+		if(map[y-1][x].value!=0) help++;
+	}
+	if(help>1) return 0;
+	return 1;
+}
+
+struct tile_t** create_map(){
 	struct tile_t **map=create_empty_map();
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
-	int shipcount = 10, currship = 0, flag = 0, x=0, y=0;
+	int shipcount = 10, currship = 0, flag = 0, x=0, y=0, deffence=0;
 	char direction;
 	for(int go=0;go!=4;){
 		reposition:
 		if(shipcount!=0){
 			printf("Place ship - %d(1)\n", shipcount);
 		}
-		printf("Move ship(2)\nSee board(3)\nReady(4)\n");
+		printf("Move ship(2)\nSee board(3)\n");
+		if(shipcount==0){
+			printf("Ready(4)\n");
+			deffence =1;
+		}
+		if(deffence==1){
+			printf("The board is not ready yet\n");
+			goto reposition;
+		}
 		scanf("%d", &go);
 		if(go==1 && shipcount!= 0){
 			printf("Choose ship type(2,3,4,6) ");
@@ -243,6 +273,7 @@ struct tile_t** create_map(int player){
 				printf("You dont have any of that kind left!\n");
 			}else{
 				position_ship(&x,&y,&direction);
+				printf("%c\n", direction);
 				if(is_suitable(x,y,direction,currship,map)== 0) goto reposition;
 				else place_ship(x,y,direction,currship,map);
 
@@ -273,6 +304,10 @@ struct tile_t** create_map(int player){
 			while(y<0||y>9||x<0||x>9);
 			if(map[y][x].value==0){
 				printf("There is no ship at that position. Relocate the ship!\n");
+				goto reposition;
+			}
+			if(check_ship_a(x,y,map)==0){
+				printf("Can't maintain a conection with the ship. Reestablish the connection!\n");
 				goto reposition;
 			}
 			printf("Move to: ");
