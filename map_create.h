@@ -9,11 +9,23 @@ struct tile_t{
 	char symbol;
 };
 
+struct ship_t{
+	int startx;
+	int starty;
+	int endx;
+	int endy;
+	int type;
+	int hit;
+	char direction;
+};
+
 struct tile_t **create_empty_map();
 
 void position_ship(int* x, int* y, char* direction);
 
 int is_suitable(int x, int y, char direction, int type, struct tile_t** map );
+
+void ships_change(int x, int y, int type, int endx, int endy, char direction);
 
 void place_ship(int x, int y, char direction, int type, struct tile_t** map);
 

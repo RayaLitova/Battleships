@@ -45,8 +45,8 @@ void choose_map(int player){
 	int map;
 	scanf("%d", &map);
 	if(map==1){
-		if(player==1) map_A_base=create_map();
-		else map_B_base=create_map();
+		if(player==1) map_A_base=create_map(player);
+		else map_B_base=create_map(player);
 	}else if(map==2){
 		if(player==1) map_A_base=load_template(1);
 		else map_B_base=load_template(2);
