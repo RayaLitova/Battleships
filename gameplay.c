@@ -82,7 +82,6 @@ void play(){
 	map_A=create_empty_map();
 	map_B=create_empty_map();
 	int shoot=0;
-	printf("%d\n", sizeA);
 	while(1){
 		printf("Player %d:\n", turn);
 		printf("Fire at specified position (1)\nFire at last position (2)\nSee map (3)\n");
@@ -103,7 +102,6 @@ void play(){
 
 int check_ship(int x, int y){
 	struct ship_t* temp=find_ship(x,y);
-	printf("%d\n", temp->type);
 	if(temp->hit==temp->type){
 		return 1;
 	}else{
@@ -115,7 +113,6 @@ struct ship_t *find_ship(int x, int y){
 	if(turn==2){
 		
 		for(int i=0;i<sizeA;i++){
-			printf("%d,%d\n", x,y);
 			if(x>=ships_A[i].startx && x<=ships_A[i].endx){
 				if(y>=ships_A[i].starty && y<=ships_A[i].endy){
 
@@ -125,7 +122,6 @@ struct ship_t *find_ship(int x, int y){
 		}
 	}else{
 		for(int i=0;i<sizeB;i++){
-			printf("%d\n", ships_B[i].type);
 			if(x>=ships_B[i].startx && x<=ships_B[i].endx){
 				if(y>=ships_B[i].starty && y<=ships_B[i].endy){
 					return &ships_B[i];
@@ -182,7 +178,7 @@ void fire(int x, int y){
 		if(map_B_base[y][x].value>1){
 			printf("A ship was hit!\n");
 
-			map_A[y][x].value=map_A_base[y][x].value;
+			map_A[y][x].value=map_B_base[y][x].value;
 			map_A[y][x].symbol='X';
 
 			struct ship_t *temp=find_ship(x,y);
@@ -208,11 +204,10 @@ void fire(int x, int y){
 	}else if(turn==2){
 		if(map_A_base[y][x].value>1){
 			printf("A ship was hit!\n");
-			map_B[y][x].value=map_B_base[y][x].value;
+			map_B[y][x].value=map_A_base[y][x].value;
 			map_B[y][x].symbol='X';
 			struct ship_t *temp=find_ship(x,y);
 			temp->hit+=1;
-			printf("%d\n", temp->hit);
 
 			if(check_ship(x,y)){
 				printf("The ship has been sunken!\n");
