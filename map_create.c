@@ -218,11 +218,11 @@ struct tile_t** create_map(){
 			printf("Ready(4)\n");
 			deffence =1;
 		}
-		if(deffence==1){
-			printf("The board is not ready yet\n");
-			goto reposition;
-		}
 		scanf("%d", &go);
+		//if(go==4 && deffence!=1){
+		//	printf("The board is not ready yet\n");
+		//	goto reposition;
+		//}
 		if(go==1 && shipcount!= 0){
 			printf("Choose ship type(2,3,4,6) ");
 			scanf("%d",&currship);
