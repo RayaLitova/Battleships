@@ -7,7 +7,8 @@ struct ship_t *find_ship(int x, int y);
 
 
 void play();
-
+void fire_last();
 void fire();
+void spec_pos();
 
 #endif

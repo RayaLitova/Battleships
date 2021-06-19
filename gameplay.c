@@ -81,7 +81,23 @@ struct tile_t** surround_ship(int x, int y, char direction, int type, struct til
 void play(){
 	map_A=create_empty_map();
 	map_B=create_empty_map();
-	fire();
+	int shoot=0;
+	while(1){
+		printf("Player %d:\n", turn);
+		printf("Fire at specified position (1)\nFire at last position (2)\nSee map (3)\n");
+		scanf("%d", &shoot);
+		if(shoot==1){
+			spec_pos();
+		}else if(shoot==2){
+			fire_last();
+
+		}else if(shoot==3){
+			if(turn==1) print_map(map_A);
+			else print_map(map_B);
+		}else{
+			printf("Invalid option!\n");
+		}
+	}
 }
 
 int check_ship(int x, int y){
@@ -113,27 +129,51 @@ struct ship_t *find_ship(int x, int y){
 	}
 }
 
+
 void win(){
 	printf("The winner is player %d!\n", turn);
 }
 
-void fire(){
-	int x,y;
+void fire_last(){
+	char direction;
 	do{
-		printf("\nPlayer %d:\n", turn);
-		printf("Choose position(A1,B2,..)\n");
-		char help_c;
-		scanf(" %c", &help_c);
-		if(help_c>'a') x = help_c-'a';
-		else x = help_c-'A';
-		scanf("%d", &y);
-		y-=1;
-		if(x<0||x>9) printf("No such x\n");
-		if(y<0||y>9) printf("No such y\n");
+		printf("Choose direction Up(u), Down(d), Left(l), Right(r)\n");
+		scanf(" %c", &direction);
+		if(direction!='d' && direction!='u' && direction!='l' && direction!='r') printf("No such direction\n");
+	}while(direction!='d' && direction!='u' && direction!='l' && direction!='r');
+
+	if(turn==1){
+		if(direction=='r'){
+    		fire(last_fire_Ax+1,last_fire_Ay);
+    	}
+	    if(direction=='l'){
+	        fire(last_fire_Ax-1,last_fire_Ay);
+	    }
+	    if(direction=='d'){
+	        fire(last_fire_Ax,last_fire_Ay+1);
+	    }
+	    if(direction=='u'){
+	        fire(last_fire_Ax,last_fire_Ay-1);
+	    }
+	}else{
+		if(direction=='r'){
+    		fire(last_fire_Bx+1,last_fire_By);
+    	}
+	    if(direction=='l'){
+	        fire(last_fire_Bx-1,last_fire_By);
+	    }
+	    if(direction=='d'){
+	        fire(last_fire_Bx,last_fire_By+1);
+	    }
+	    if(direction=='u'){
+	        fire(last_fire_Bx,last_fire_By-1);
+	    }
 	}
-	while(y<0||y>9||x<0||x>9);
-	if(turn==2){
-		if(map_A_base[y][x].value>1){
+}
+
+void fire(int x, int y){
+	if(turn==1){
+		if(map_B_base[y][x].value>1){
 			printf("A ship was hit!\n");
 
 			map_A[y][x].value=map_A_base[y][x].value;
@@ -156,13 +196,13 @@ void fire(){
 			printf("No ships were hit! :(\n");
 			map_A[y][x].value=1;
 			map_A[y][x].symbol='O';
-			turn=1;
+			turn=2;
 		}
 		last_fire_Ax=x;
 		last_fire_Ay=y;
 
-	}else if(turn==1){
-		if(map_B_base[y][x].value>1){
+	}else if(turn==2){
+		if(map_A_base[y][x].value>1){
 			printf("A ship was hit!\n");
 			map_B[y][x].value=map_B_base[y][x].value;
 			map_B[y][x].symbol='X';
@@ -185,12 +225,29 @@ void fire(){
 			printf("No ships were hit! :(\n");
 			map_B[y][x].value=1;
 			map_B[y][x].symbol='O';
-			turn=2;
+			turn=1;
 		}
 		last_fire_Bx=x;
 		last_fire_By=y;
 	}
-	fire();
+}
+
+void spec_pos(){
+	int x,y;
+	do{
+		printf("\nPlayer %d:\n", turn);
+		printf("Choose position(A1,B2,..)\n");
+		char help_c;
+		scanf(" %c", &help_c);
+		if(help_c>'a') x = help_c-'a';
+		else x = help_c-'A';
+		scanf("%d", &y);
+		y-=1;
+		if(x<0||x>9) printf("No such x\n");
+		if(y<0||y>9) printf("No such y\n");
+	}
+	while(y<0||y>9||x<0||x>9);
+	fire(x,y);
 }
 
 

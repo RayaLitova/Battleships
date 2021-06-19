@@ -4,6 +4,7 @@ struct ship_t *ships_A;
 struct ship_t *ships_B;
 int sizeA=0, sizeB=0;
 int pl;
+const int ship_count=10;
 
 struct tile_t **create_empty_map(){
 	struct tile_t **new_map=malloc(map_size*sizeof(struct tile_t*));
@@ -33,15 +34,12 @@ void position_ship(int* x, int* y, char* direction){
 	while(*y<0||*y>9||*x<0||*x>9);
 	do{
 		printf("Choose direction Up(u), Down(d), Left(l), Right(r)\n");
-		printf("%s\n", direction);
 		scanf(" %c", direction);
-		printf("%s\n", direction);
 		if(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r') printf("No such direction\n");
 	}while(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r');
 }
 
 void ships_change(int x, int y, int type, int endx, int endy, char direction){
-	printf("cc");
     if(pl==1){
         ships_A[sizeA].startx=x;
         ships_A[sizeA].starty=y;
@@ -111,7 +109,6 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		}
 	}
 	if(direction=='d'){
-		printf("aa");
 		if(x==0)chx=x;
 		else chx=x-1;
 		if(y==0)chy=y;
@@ -170,7 +167,6 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map){
         ships_change(x,y,type,x-type-1,y,direction);
     }
     if(direction=='d'){
-    	printf("bb");
         for(int chy=y;chy<y+type;chy++){
             map[chy][x].value=type;
             map[chy][x].symbol='X';
@@ -241,6 +237,8 @@ int check_ship_a(int x, int y, struct tile_t** map){
 }
 
 struct tile_t** create_map(){
+	ships_A=malloc(ship_count*sizeof(struct ship_t));
+	ships_B=malloc(ship_count*sizeof(struct ship_t));
 	struct tile_t **map=create_empty_map();
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
 	int shipcount = 10, currship = 0, flag = 0, x=0, y=0, deffence=0;
@@ -273,7 +271,6 @@ struct tile_t** create_map(){
 				printf("You dont have any of that kind left!\n");
 			}else{
 				position_ship(&x,&y,&direction);
-				printf("%c\n", direction);
 				if(is_suitable(x,y,direction,currship,map)== 0) goto reposition;
 				else place_ship(x,y,direction,currship,map);
 
