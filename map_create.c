@@ -6,6 +6,27 @@ int sizeA=0, sizeB=0;
 int pl;
 const int ship_count=10;
 
+
+void print_map(struct tile_t** map){
+	printf("   |");
+	for(int i=0;i<sqrt(map_size);i++){
+		printf(" %c |", 'A'+i);
+		
+	}
+	for(int i=0;i<sqrt(map_size);i++){
+		printf("\n    --- --- --- --- --- --- --- --- --- ---\n");
+		if(i+1!=10){
+			printf(" %d |", i+1);
+		}else{
+			printf("%d |", i+1);
+		}
+		for(int j=0;j<sqrt(map_size);j++){
+			printf(" %c |", map[i][j].symbol);
+		}
+	}
+	printf("\n");
+}
+
 struct tile_t **create_empty_map(){
 	struct tile_t **new_map=malloc(map_size*sizeof(struct tile_t*));
 	for(int i=0;i<sqrt(map_size);i++){
@@ -21,7 +42,7 @@ struct tile_t **create_empty_map(){
 
 void position_ship(int* x, int* y, char* direction){
 	do{
-		printf("Choose position(A1,B2,..)\n");
+		printf("Choose position(A1,B2,..) ");
 		char help_c;
 		scanf(" %c", &help_c);
 		if(help_c>96) *x = help_c-97;
@@ -33,7 +54,7 @@ void position_ship(int* x, int* y, char* direction){
 	}
 	while(*y<0||*y>9||*x<0||*x>9);
 	do{
-		printf("Choose direction Up(u), Down(d), Left(l), Right(r)\n");
+		printf("Choose direction Up(u), Down(d), Left(l), Right(r) ");
 		scanf(" %c", direction);
 		if(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r') printf("No such direction\n");
 	}while(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r');
@@ -48,7 +69,6 @@ void ships_change(int x, int y, int type, int endx, int endy, char direction){
         ships_A[sizeA].type=type;
         ships_A[sizeA].hit=0;
         ships_A[sizeA].direction=direction;
-        printf("%d\n", sizeA);
         sizeA++;
     }else{
         ships_B[sizeB].startx=x;
@@ -66,7 +86,7 @@ void ships_change(int x, int y, int type, int endx, int endy, char direction){
 int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 	int chy, chx, maxY, maxX;
 	if((direction=='r'&& x>9-type+1)||(direction=='l'&& x<0+type-1)||(direction=='u'&& y<0+type-1)||(direction=='d'&& y>9-type+1)) {
-		printf("You going out of borders! Redirect the ship!\n");
+		printf("You going out of course! Redirect the ship!\n");
 		return 0;
 	}
 	if(direction=='r'){
@@ -248,18 +268,18 @@ struct tile_t** create_map(int player){
 	for(int go=0;go!=4;){
 		reposition:
 		if(shipcount!=0){
-			printf("Place ship - %d(1)\n", shipcount);
+			printf("\nPlace ship - %d (1)\n", shipcount);
 		}
 		printf("Move ship(2)\nSee board(3)\n");
 		if(shipcount==0){
 			printf("Ready(4)\n");
-			deffence =1;
+			deffence = 1;
 		}
 		scanf("%d", &go);
-		//if(go==4 && deffence!=1){
-		//	printf("The board is not ready yet\n");
-		//	goto reposition;
-		//}
+		if(go==4 && deffence!=1){
+			printf("The board is not ready yet\n");
+			goto reposition;
+		}
 		if(go==1 && shipcount!= 0){
 			printf("Choose ship type(2,3,4,6) ");
 			scanf("%d",&currship);

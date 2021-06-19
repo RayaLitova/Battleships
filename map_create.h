@@ -19,6 +19,8 @@ struct ship_t{
 	char direction;
 };
 
+void print_map(struct tile_t** map);
+
 struct tile_t **create_empty_map();
 
 void position_ship(int* x, int* y, char* direction);

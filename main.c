@@ -4,25 +4,7 @@
 extern struct tile_t **map_A_base;
 extern struct tile_t **map_B_base;
 
-int print_map(struct tile_t** map){
-	printf("   |");
-	for(int i=0;i<sqrt(map_size);i++){
-		printf(" %c |", 'A'+i);
-		
-	}
-	for(int i=0;i<sqrt(map_size);i++){
-		printf("\n    --- --- --- --- --- --- --- --- --- ---\n");
-		if(i+1!=10){
-			printf(" %d |", i+1);
-		}else{
-			printf("%d |", i+1);
-		}
-		for(int j=0;j<sqrt(map_size);j++){
-			printf(" %c |", map[i][j].symbol);
-		}
-	}
-	printf("\n");
-}
+
 
 void choose_difficulty(){
 	printf("Easy(1)\nHard(2)\nInsane(3)\nRandom(4)\n");
@@ -43,6 +25,7 @@ struct tile_t** random_map(){
 }
 
 void choose_map(int player){
+	system("clear");
 	printf("Player %d:\n", player);
 	printf("Create map(1)\nLoad template(2)\nRandom map(3)\n");
 	int map;
@@ -83,6 +66,5 @@ void game_start(){
 }
 
 int main(){
-	struct tile_t** map=create_empty_map();
 	game_start();
 }

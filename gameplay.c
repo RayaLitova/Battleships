@@ -83,8 +83,9 @@ void play(){
 	map_B=create_empty_map();
 	int shoot=0;
 	while(1){
-		printf("Player %d:\n", turn);
-		printf("Fire at specified position (1)\nFire at last position (2)\nSee map (3)\n");
+		printf("\nPlayer %d:\n", turn);
+		if(turn == 1) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ay+'A',last_fire_Ax+1);
+		if(turn == 2) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_By+'A',last_fire_Bx+1);
 		scanf("%d", &shoot);
 		if(shoot==1){
 			spec_pos();
@@ -115,7 +116,6 @@ struct ship_t *find_ship(int x, int y){
 		for(int i=0;i<sizeA;i++){
 			if(x>=ships_A[i].startx && x<=ships_A[i].endx){
 				if(y>=ships_A[i].starty && y<=ships_A[i].endy){
-
 					return &ships_A[i];
 				}
 			}
@@ -129,6 +129,7 @@ struct ship_t *find_ship(int x, int y){
 			}
 		}
 	}
+	return 0;
 }
 
 
@@ -139,23 +140,47 @@ void win(){
 void fire_last(){
 	char direction;
 	do{
-		printf("Choose direction Up(u), Down(d), Left(l), Right(r)\n");
+		printf("Choose direction Up(u), Down(d), Left(l), Right(r) ");
 		scanf(" %c", &direction);
 		if(direction!='d' && direction!='u' && direction!='l' && direction!='r') printf("No such direction\n");
 	}while(direction!='d' && direction!='u' && direction!='l' && direction!='r');
 
 	if(turn==1){
 		if(direction=='r'){
-    		fire(last_fire_Ax+1,last_fire_Ay);
+			last_fire_Ax++;
+			if(last_fire_Ax>10){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_A[last_fire_Ax][last_fire_Ay].value>0) last_fire_Ax++;
+    		fire(last_fire_Ax,last_fire_Ay);
     	}
 	    if(direction=='l'){
-	        fire(last_fire_Ax-1,last_fire_Ay);
+	    	last_fire_Ax--;
+	    	if(last_fire_Ax<0){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ax--;
+	        fire(last_fire_Ax,last_fire_Ay);
 	    }
 	    if(direction=='d'){
-	        fire(last_fire_Ax,last_fire_Ay+1);
+	    	last_fire_Ay++;
+	    	if(last_fire_Ay>10){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay++;
+	        fire(last_fire_Ax,last_fire_Ay);
 	    }
 	    if(direction=='u'){
-	        fire(last_fire_Ax,last_fire_Ay-1);
+	    	last_fire_Ay--;
+	    	if(last_fire_Ay<0){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay--;
+	        fire(last_fire_Ax,last_fire_Ay);
 	    }
 	}else{
 		if(direction=='r'){
@@ -197,6 +222,7 @@ void fire(int x, int y){
 			map_A[y][x].value=1;
 			map_A[y][x].symbol='O';
 			turn=2;
+			system("clear");
 		}
 		last_fire_Ax=x;
 		last_fire_Ay=y;
@@ -204,10 +230,12 @@ void fire(int x, int y){
 	}else if(turn==2){
 		if(map_A_base[y][x].value>1){
 			printf("A ship was hit!\n");
+
 			map_B[y][x].value=map_A_base[y][x].value;
 			map_B[y][x].symbol='X';
+
 			struct ship_t *temp=find_ship(x,y);
-			temp->hit+=1;
+			temp->hit++;
 
 			if(check_ship(x,y)){
 				printf("The ship has been sunken!\n");
@@ -223,6 +251,7 @@ void fire(int x, int y){
 			map_B[y][x].value=1;
 			map_B[y][x].symbol='O';
 			turn=1;
+			system("clear");
 		}
 		last_fire_Bx=x;
 		last_fire_By=y;
@@ -233,10 +262,10 @@ void spec_pos(){
 	int x,y;
 	do{
 		printf("\nPlayer %d:\n", turn);
-		printf("Choose position(A1,B2,..)\n");
+		printf("Choose position(A1,B2,..) ");
 		char help_c;
 		scanf(" %c", &help_c);
-		if(help_c>'a') x = help_c-'a';
+		if(help_c>='a') x = help_c-'a';
 		else x = help_c-'A';
 		scanf("%d", &y);
 		y-=1;
