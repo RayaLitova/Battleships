@@ -48,6 +48,7 @@ void ships_change(int x, int y, int type, int endx, int endy, char direction){
         ships_A[sizeA].type=type;
         ships_A[sizeA].hit=0;
         ships_A[sizeA].direction=direction;
+        printf("%d\n", sizeA);
         sizeA++;
     }else{
         ships_B[sizeB].startx=x;
@@ -236,7 +237,8 @@ int check_ship_a(int x, int y, struct tile_t** map){
 	return 1;
 }
 
-struct tile_t** create_map(){
+struct tile_t** create_map(int player){
+	pl=player;
 	ships_A=malloc(ship_count*sizeof(struct ship_t));
 	ships_B=malloc(ship_count*sizeof(struct ship_t));
 	struct tile_t **map=create_empty_map();

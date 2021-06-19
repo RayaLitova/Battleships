@@ -33,7 +33,7 @@ void delete_ship(int x, int y, struct tile_t** map);
 
 int check_ship_a(int x, int y, struct tile_t** map);
 
-struct tile_t ** create_map();
+struct tile_t ** create_map(int player);
 
 
 #endif
