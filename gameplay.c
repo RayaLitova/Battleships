@@ -184,16 +184,40 @@ void fire_last(){
 	    }
 	}else{
 		if(direction=='r'){
-    		fire(last_fire_Bx+1,last_fire_By);
+			last_fire_Bx++;
+			if(last_fire_Bx>10){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_Bx][last_fire_By].value>0) last_fire_Bx++;
+    		fire(last_fire_Bx,last_fire_By);
     	}
 	    if(direction=='l'){
-	        fire(last_fire_Bx-1,last_fire_By);
+	    	last_fire_Bx--;
+	    	if(last_fire_Bx<0){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx--;
+	        fire(last_fire_Bx,last_fire_By);
 	    }
 	    if(direction=='d'){
-	        fire(last_fire_Bx,last_fire_By+1);
+	    	last_fire_By++;
+	    	if(last_fire_By>10){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By++;
+	        fire(last_fire_Bx,last_fire_By);
 	    }
 	    if(direction=='u'){
-	        fire(last_fire_Bx,last_fire_By-1);
+	    	last_fire_By--;
+	    	if(last_fire_By<0){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By--;
+	        fire(last_fire_Bx,last_fire_By);
 	    }
 	}
 }

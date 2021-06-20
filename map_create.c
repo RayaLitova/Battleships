@@ -341,5 +341,6 @@ struct tile_t** create_map(int player){
 			printf("Invalid command!\n");
 		}
 	}
+	
 	return map;
 }
