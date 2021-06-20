@@ -182,7 +182,9 @@ void fire_last(){
 			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay--;
 	        fire(last_fire_Ax,last_fire_Ay);
 	    }
+
 	}else{
+		
 		if(direction=='r'){
 			last_fire_Bx++;
 			if(last_fire_Bx>10){
