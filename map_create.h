@@ -37,5 +37,6 @@ int check_ship_a(int x, int y, struct tile_t** map);
 
 struct tile_t ** create_map(int player);
 
+struct tile_t** random_map(int player);
 
 #endif

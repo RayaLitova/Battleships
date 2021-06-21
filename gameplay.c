@@ -84,8 +84,8 @@ void play(){
 	int shoot=0;
 	while(1){
 		printf("\nPlayer %d:\n", turn);
-		if(turn == 1) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ay+'A',last_fire_Ax+1);
-		if(turn == 2) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_By+'A',last_fire_Bx+1);
+		if(turn == 1) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ax+'A',last_fire_Ay+1);
+		if(turn == 2) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Bx+'A',last_fire_By+1);
 		scanf("%d", &shoot);
 		if(shoot==1){
 			spec_pos();
@@ -182,18 +182,44 @@ void fire_last(){
 			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay--;
 	        fire(last_fire_Ax,last_fire_Ay);
 	    }
+
 	}else{
+		
 		if(direction=='r'){
-    		fire(last_fire_Bx+1,last_fire_By);
+			last_fire_Bx++;
+			if(last_fire_Bx>10){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_Bx][last_fire_By].value>0) last_fire_Bx++;
+    		fire(last_fire_Bx,last_fire_By);
     	}
 	    if(direction=='l'){
-	        fire(last_fire_Bx-1,last_fire_By);
+	    	last_fire_Bx--;
+	    	if(last_fire_Bx<0){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx--;
+	        fire(last_fire_Bx,last_fire_By);
 	    }
 	    if(direction=='d'){
-	        fire(last_fire_Bx,last_fire_By+1);
+	    	last_fire_By++;
+	    	if(last_fire_By>10){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By++;
+	        fire(last_fire_Bx,last_fire_By);
 	    }
 	    if(direction=='u'){
-	        fire(last_fire_Bx,last_fire_By-1);
+	    	last_fire_By--;
+	    	if(last_fire_By<0){
+				printf("You're going out of course!");
+				return;
+			}
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By--;
+	        fire(last_fire_Bx,last_fire_By);
 	    }
 	}
 }
@@ -212,17 +238,18 @@ void fire(int x, int y){
 				printf("The ship has been sunken!\n");
 				ships_left_A--;
 				if(ships_left_A==0){
+					printf("aa\n");
 					win();
 					return;
 				}
-				map_A=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_A);
+				//map_A=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_A);
 			}
 		}else{
 			printf("No ships were hit! :(\n");
 			map_A[y][x].value=1;
 			map_A[y][x].symbol='O';
 			turn=2;
-			system("clear");
+			//system("clear");
 		}
 		last_fire_Ax=x;
 		last_fire_Ay=y;
@@ -244,14 +271,14 @@ void fire(int x, int y){
 					win();
 					return;
 				}
-				map_B=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_B);
+				//map_B=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_B);
 			}
 		}else{
 			printf("No ships were hit! :(\n");
 			map_B[y][x].value=1;
 			map_B[y][x].symbol='O';
 			turn=1;
-			system("clear");
+			//system("clear");
 		}
 		last_fire_Bx=x;
 		last_fire_By=y;
@@ -276,4 +303,57 @@ void spec_pos(){
 	fire(x,y);
 }
 
+void easy_mode(){
+	map_A=create_empty_map();
+	map_B=create_empty_map();
+	int shoot=0, j, k;
+	while(1){
+		if(turn==1){
+			printf("\nPlayer %d:\n", turn);
+			printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ax+'A',last_fire_Ay+1);
+			scanf("%d", &shoot);
+			if(shoot==1){
+				spec_pos();
+			}else if(shoot==2){
+				fire_last();
+			}else if(shoot==3){
+				print_map(map_A);
+			}else{
+				printf("Invalid option!\n");
+			}
+		}
+		else{
+			j = rand() % 10;
+			k = rand() % 10;
+			fire(j, k);
+		}
+	}
+}
 
+void hard_mode(){
+	map_A=create_empty_map();
+	map_B=create_empty_map();
+	int shoot=0, j, k;
+	while(turn==1){
+			printf("\nPlayer %d:\n", turn);
+			printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ax+'A',last_fire_Ay+1);
+			scanf("%d", &shoot);
+			if(shoot==1){
+				spec_pos();
+			}else if(shoot==2){
+				fire_last();
+			}else if(shoot==3){
+				print_map(map_A);
+			}else{
+				printf("Invalid option!\n");
+			}
+	}
+	for(j=0;j<10;j++){
+		for(k=0;k<10;k++){
+			turn = 2;
+			fire(j, k);
+		}
+	}
+	
+	return;
+}
