@@ -7,25 +7,6 @@ extern struct ship_t *ships_A;
 extern struct ship_t *ships_B;
 extern int pl;
 
-int print_map(struct tile_t** map){
-	printf("   |");
-	for(int i=0;i<sqrt(map_size);i++){
-		printf(" %c |", 'A'+i);
-		
-	}
-	for(int i=0;i<sqrt(map_size);i++){
-		printf("\n    --- --- --- --- --- --- --- --- --- ---\n");
-		if(i+1!=10){
-			printf(" %d |", i+1);
-		}else{
-			printf("%d |", i+1);
-		}
-		for(int j=0;j<sqrt(map_size);j++){
-			printf(" %c |", map[i][j].symbol);
-		}
-	}
-	printf("\n");
-}
 
 void choose_difficulty(){
 	printf("Easy(1)\nHard(2)\nInsane(3)\nRandom(4)\n");

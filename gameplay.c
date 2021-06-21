@@ -31,12 +31,12 @@ struct tile_t** surround_ship(int x, int y, char direction, int type, struct til
 		if(i==0 || i==type-1){
 			if(maindir=='x'){
 				if(i==type-1) dirx*=-1;
-				if(y-dirx>=0 && y-dirx<=9){
+				if(x-dirx>=0 && x-dirx<=9){
 					if(y-dirx>=0 && y-dirx<=9){
 						map[y-dirx][x-dirx].symbol='O';
 						map[y-dirx][x-dirx].value=1;
 					}
-					if(y>=0 && y<=9){
+					if(y>=0 && y<=9){ //zashto nqma proverka?!?!?!??!??!
 						map[y][x-dirx].symbol='O';
 						map[y][x-dirx].value=1;
 					}
@@ -84,8 +84,8 @@ void play(){
 	int shoot=0;
 	while(1){
 		printf("\nPlayer %d:\n", turn);
-		if(turn == 1) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ay+'A',last_fire_Ax+1);
-		if(turn == 2) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_By+'A',last_fire_Bx+1);
+		if(turn == 1) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ax+'A',last_fire_Ay+1);
+		if(turn == 2) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Bx+'A',last_fire_By+1);
 		scanf("%d", &shoot);
 		if(shoot==1){
 			spec_pos();
@@ -226,6 +226,10 @@ void fire_last(){
 
 void fire(int x, int y){
 	if(turn==1){
+		if(map_A[y][x].value>0){
+			printf("This place is already on fire!");
+			return;
+		}
 		if(map_B_base[y][x].value>1){
 			printf("A ship was hit!\n");
 
@@ -254,6 +258,10 @@ void fire(int x, int y){
 		last_fire_Ay=y;
 
 	}else if(turn==2){
+		if(map_B[y][x].value>0){
+			printf("This place is already on fire!");
+			return;
+		}
 		if(map_A_base[y][x].value>1){
 			printf("A ship was hit!\n");
 
