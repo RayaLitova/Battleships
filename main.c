@@ -35,6 +35,10 @@ void choose_map(int player){
 	}else if(map==2){
 		if(player==1){
 			map_A_base=load_template(1);
+			if(!map_A_base){
+				choose_map(player);
+				return;
+			}
 			print_map(map_A_base);
 			char a; 
 			printf("Are you sure you want to load this template? ");
@@ -45,6 +49,10 @@ void choose_map(int player){
 		}
 		else{
 			map_B_base=load_template(2);	
+			if(!map_B_base){
+				choose_map(player);
+				return;
+			}
 			print_map(map_B_base);
 			char a;
 			printf("Are you sure you want to load this template? ");
