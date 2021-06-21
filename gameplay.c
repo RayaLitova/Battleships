@@ -350,6 +350,7 @@ void hard_mode(){
 	}
 	for(j=0;j<10;j++){
 		for(k=0;k<10;k++){
+			turn = 2;
 			fire(j, k);
 		}
 	}
