@@ -7,5 +7,6 @@
 #include <math.h>
 #include "map_create.h"
 #include "gameplay.h"
+#include "files.h"
 
 #endif
