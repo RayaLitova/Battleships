@@ -105,7 +105,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 					return 0;
 				}
 			}
-			if(y==0||y==9)chy=y;
+			if(y==0)chy=y;
 			else chy=y-1;
 		}
 	}
@@ -341,6 +341,38 @@ struct tile_t** create_map(int player){
 			printf("Invalid command!\n");
 		}
 	}
+
+	return map;
+}
+
+
+
+
+struct tile_t** random_map(int player){
+	pl = player;
+	if (pl==1) {ships_A=malloc(10*sizeof(struct ship_t));}
+	else {ships_B=malloc(10*sizeof(struct ship_t));}
+	struct tile_t **map=create_empty_map();
+	printf("Generating random map, please wait\n");
+	int x, y, dir, shipcount = 10, currship = 9, emergency_reset = 0;
+	char directions_help [5] = {'l', 'r', 'u', 'd'};
+	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
+	while (shipcount>0){
+		x = rand() % 10;
+		y = rand() % 10;
+		dir = rand() % 4;
+		printf("x=%d y=%d dir=%c\n", x, y, directions_help[dir]);
+		if(is_suitable(x, y, directions_help[dir], ships[currship], map)==1){
+			place_ship(x, y, directions_help[dir], ships[currship], map);
+			shipcount --;
+			currship--;
+			}
+		if(emergency_reset > 5000){break;}
+		emergency_reset ++;
+	}
+	if (emergency_reset>5000){
+		return random_map(player);}
+	print_map(map);
 	
 	return map;
 }

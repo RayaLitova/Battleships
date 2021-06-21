@@ -15,4 +15,8 @@ void fire();
 
 void spec_pos();
 
+void hard_mode();
+
+void easy_mode();
+
 #endif
