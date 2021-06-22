@@ -15,6 +15,7 @@ struct ship_t{
 	int endx;
 	int endy;
 	int type;
+	int check_type;
 	int hit;
 	char direction;
 };
@@ -31,7 +32,7 @@ void ships_change(int x, int y, int type, int endx, int endy, char direction);
 
 void place_ship(int x, int y, char direction, int type, struct tile_t** map);
 
-void delete_ship(int x, int y, struct tile_t** map);
+void delete_ship(struct ship_t* ship,  struct tile_t** map);
 
 int check_ship_a(int x, int y, struct tile_t** map);
 

@@ -7,6 +7,11 @@ int sizeA=0, sizeB=0;
 int pl;
 const int ship_count=10;
 
+void fill_ships(struct ship_t* ships){
+	for(int i=0; i<10; i++){
+		ships[i].type=1;
+	}
+}
 
 void print_map(struct tile_t** map){
 	printf("   |");
@@ -63,23 +68,35 @@ void position_ship(int* x, int* y, char* direction){
 
 void ships_change(int x, int y, int type, int endx, int endy, char direction){
     if(pl==1){
-        ships_A[sizeA].startx=x;
-        ships_A[sizeA].starty=y;
-        ships_A[sizeA].endx=endx;
-        ships_A[sizeA].endy=endy;
-        ships_A[sizeA].type=type;
-        ships_A[sizeA].hit=0;
-        ships_A[sizeA].direction=direction;
-        sizeA++;
+		for(int i=0; i<ship_count; i++ ){
+			if(ships_A[i].type==1){
+				ships_A[i].startx=x;
+				ships_A[i].starty=y;
+				ships_A[i].endx=endx;
+				ships_A[i].endy=endy;
+				ships_A[i].type=type;
+				ships_A[i].check_type=type;
+				ships_A[i].hit=0;
+				ships_A[i].direction=direction;
+				sizeA++;
+				break;
+			}
+		}
     }else{
-        ships_B[sizeB].startx=x;
-        ships_B[sizeB].starty=y;
-        ships_B[sizeB].endx=endx;
-        ships_B[sizeB].endy=endy;
-        ships_B[sizeB].type=type;
-        ships_B[sizeB].hit=0;
-        ships_B[sizeB].direction=direction;
-        sizeB++;
+		for(int i=0; i<ship_count; i++ ){
+			if(ships_B[i].type==1){
+				ships_B[i].startx=x;
+				ships_B[i].starty=y;
+				ships_B[i].endx=endx;
+				ships_B[i].endy=endy;
+				ships_B[i].type=type;
+				ships_B[i].check_type=type;
+				ships_B[i].hit=0;
+				ships_B[i].direction=direction;
+				sizeB++;
+				break;
+			}
+		}
     }
 
 }
@@ -204,40 +221,46 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map){
     }
 }
 
-void delete_ship(int x, int y, struct tile_t** map){
-	int type = map[y][x].value;
-	if(x!=9){
-		if(map[y][x+1].value!=0){
-			for(int hx=x;hx<x+type;hx++){
-				map[y][hx].value = 0;
-				map[y][hx].symbol=' ';
+void delete_ship(struct ship_t* ship, struct tile_t** map){
+	printf("%d\n", ship->type);
+	int type = ship->type;
+	printf("%d\n", ship->type);
+	if(ship->startx!=9){
+		if(map[ship->starty][ship->startx+1].value!=0){
+			for(int hx=ship->startx;hx<ship->startx+type;hx++){
+				map[ship->starty][hx].value = 0;
+				map[ship->starty][hx].symbol=' ';
 			}
 		}
 	}
-	if(x!=0){
-		if(map[y][x-1].value!=0){
-			for(int hx=x;hx>x-type;hx--){
-				map[y][hx].value = 0;
-				map[y][hx].symbol=' ';
+	if(ship->startx!=0){
+		if(map[ship->starty][ship->startx-1].value!=0){
+			for(int hx=ship->startx;hx>ship->startx-type;hx--){
+				map[ship->starty][hx].value = 0;
+				map[ship->starty][hx].symbol=' ';
 			}
 		}
 	}
-	if(y!=9){
-		if(map[y+1][x].value!=0){
-			for(int hy=y;hy<y+type;hy++){
-				map[hy][x].value = 0;
-				map[hy][x].symbol=' ';
+	printf("starty %d\n",ship->starty);
+	if(ship->starty!=9){
+		printf("starty %d\n",ship->starty);
+		if(map[ship->starty+1][ship->startx].value!=0){
+			for(int hy=ship->starty;hy<ship->starty+type;hy++){
+				map[hy][ship->startx].value = 0;
+				map[hy][ship->startx].symbol=' ';
 			}
 		}
 	}
-	if(y!=0){
-		if(map[y-1][x].value!=0){
-			for(int hy=y;hy>y-type;hy--){
-				map[hy][x].value = 0;
-				map[hy][x].symbol=' ';
+	if(ship->starty!=0){
+		if(map[ship->starty-1][ship->startx].value!=0){
+			for(int hy=ship->starty;hy>ship->starty-type;hy--){
+				map[hy][ship->startx].value = 0;
+				map[hy][ship->startx].symbol=' ';
+				
 			}
 		}
 	}
+	ship->type =1;
 }
 
 int check_ship_a(int x, int y, struct tile_t** map){
@@ -264,6 +287,10 @@ struct tile_t** create_map(int player){
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
 	int shipcount = 10, currship = 0, flag = 0, x=0, y=0, deffence=0;
 	char direction;
+	if(pl==1)fill_ships(ships_A);
+	else fill_ships(ships_B);
+
+
 	for(int go=0;go!=4;){
 		reposition:
 		if(shipcount!=0){
@@ -330,12 +357,21 @@ struct tile_t** create_map(int player){
 			}
 			printf("Move to: ");
 			position_ship(&trX,&trY,&direction);
-			if(is_suitable(trX,trY,direction,map[y][x].value,map, 0)== 0) goto reposition;
-			else place_ship(trX,trY,direction,map[y][x].value,map);
-			delete_ship(x,y,map);
+			struct ship_t* temp_sh = find_ship(x,y, 3-pl);
+			
+			delete_ship(temp_sh,map);
+			
+			if(is_suitable(trX,trY,direction,temp_sh->check_type,map, 0)== 0) {
+			
+				place_ship(x,y,temp_sh->direction,temp_sh->check_type,map);
+				goto reposition;
+			}
+			else place_ship(trX,trY,direction,temp_sh->check_type,map);
+			
 
 		}else if(go==3){
 			print_map(map);
+			
 		}else if(go!=4){
 			printf("Invalid command!\n");
 		}

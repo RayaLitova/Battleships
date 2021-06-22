@@ -111,7 +111,7 @@ void play(){
 }
 
 int check_ship(int x, int y){
-	struct ship_t* temp=find_ship(x,y);
+	struct ship_t* temp=find_ship(x,y,turn);
 	if(temp->hit==temp->type){
 		return 1;
 	}else{
@@ -131,7 +131,7 @@ int max(int a, int b){
 }
 
 
-struct ship_t *find_ship(int x, int y){
+struct ship_t *find_ship(int x, int y, int turn){
 	if(turn==2){
 		for(int i=0;i<sizeA;i++){
 			if(x>=min(ships_A[i].startx,ships_A[i].endx) && x<=max(ships_A[i].startx,ships_A[i].endx)){
@@ -257,7 +257,7 @@ void fire(int x, int y){
 
 			map_A[y][x].value=map_B_base[y][x].value;
 			map_A[y][x].symbol='X';
-			struct ship_t *temp=find_ship(x,y);
+			struct ship_t *temp=find_ship(x,y, turn);
 			temp->hit++;
 			if(check_ship(x,y)){
 				printf("The ship has been sunken!\n");
@@ -290,7 +290,7 @@ void fire(int x, int y){
 			map_B[y][x].value=map_A_base[y][x].value;
 			map_B[y][x].symbol='X';
 
-			struct ship_t *temp=find_ship(x,y);
+			struct ship_t *temp=find_ship(x,y, turn);
 			temp->hit++;
 
 			if(check_ship(x,y)){
