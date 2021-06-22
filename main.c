@@ -9,7 +9,7 @@ extern int pl;
 
 
 int choose_difficulty(){
-	printf("Easy(1)\nHard(2)\n");
+	printf("Easy(1)\nTooHard(2)\n");
 	int diff;
 	do{scanf("%d", &diff);}
 	while(diff>2 || diff<1);
@@ -63,11 +63,11 @@ void choose_map(int player){
 		}
 	}else if(map==3){
 		if(player==1){
-			map_A_base=random_map(1);
+			map_A_base=random_map(1,2);
 			call_sf(player);
 		}
 		else{ 
-			map_B_base=random_map(2);
+			map_B_base=random_map(2,2);
 			call_sf(player);
 		}
 	}else{
@@ -89,7 +89,7 @@ void game_start(){
 		choose_map(2);
 		play();
 	}else{
-		map_B_base=random_map(2);
+		map_B_base=random_map(2,mode);
 		if(choose_difficulty()==2){hard_mode();}
 		else{easy_mode();}
 		

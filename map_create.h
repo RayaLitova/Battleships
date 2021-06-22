@@ -25,7 +25,7 @@ struct tile_t **create_empty_map();
 
 void position_ship(int* x, int* y, char* direction);
 
-int is_suitable(int x, int y, char direction, int type, struct tile_t** map );
+int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int random_flag );
 
 void ships_change(int x, int y, int type, int endx, int endy, char direction);
 
@@ -37,6 +37,6 @@ int check_ship_a(int x, int y, struct tile_t** map);
 
 struct tile_t ** create_map(int player);
 
-struct tile_t** random_map(int player);
+struct tile_t** random_map(int player, int mode);
 
 #endif

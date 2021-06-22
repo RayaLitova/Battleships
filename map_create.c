@@ -1,4 +1,5 @@
 #include "defines.h"
+#include <time.h>
 
 struct ship_t *ships_A;
 struct ship_t *ships_B;
@@ -83,10 +84,10 @@ void ships_change(int x, int y, int type, int endx, int endy, char direction){
 
 }
 
-int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
+int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int random_flag ){
 	int chy, chx, maxY, maxX;
 	if((direction=='r'&& x>9-type+1)||(direction=='l'&& x<0+type-1)||(direction=='u'&& y<0+type-1)||(direction=='d'&& y>9-type+1)) {
-		printf("You going out of course! Redirect the ship!\n");
+		if(random_flag==0){printf("You going out of course! Redirect the ship!\n");}
 		return 0;
 	}
 	if(direction=='r'){
@@ -101,7 +102,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx<maxX;chx++){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect. \n");
+					if(random_flag==0){printf("Ships too close to each other, they might crash. Please redirect. \n");}
 					return 0;
 				}
 			}
@@ -121,7 +122,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx>maxX;chx--){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect. \n");
+					if(random_flag==0){printf("Ships too close to each other, they might crash. Please redirect. \n");}
 					return 0;
 				}
 			}
@@ -141,7 +142,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx<maxX;chx++){
 			for(;chy<maxY;chy++){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect. \n");
+					if(random_flag==0){printf("Ships too close to each other, they might crash. Please redirect. \n");}
 					return 0;
 				}
 			}
@@ -161,7 +162,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map ){
 		for(;chx<maxX;chx++){
 			for(;chy>maxY;chy--){
 				if(map[chy][chx].value!=0){
-					printf("Ships too close to each other, they might crash. Please redirect. \n");
+					if(random_flag==0){printf("Ships too close to each other, they might crash. Please redirect. \n");}
 					return 0;
 				}
 			}
@@ -293,7 +294,7 @@ struct tile_t** create_map(int player){
 				printf("You dont have any of that kind left!\n");
 			}else{
 				position_ship(&x,&y,&direction);
-				if(is_suitable(x,y,direction,currship,map)== 0) goto reposition;
+				if(is_suitable(x,y,direction,currship,map, 0)== 0) goto reposition;
 				else place_ship(x,y,direction,currship,map);
 
 				for(int i=0; i<10;i++){
@@ -331,7 +332,7 @@ struct tile_t** create_map(int player){
 			}
 			printf("Move to: ");
 			position_ship(&trX,&trY,&direction);
-			if(is_suitable(trX,trY,direction,map[y][x].value,map)== 0) goto reposition;
+			if(is_suitable(trX,trY,direction,map[y][x].value,map, 0)== 0) goto reposition;
 			else place_ship(trX,trY,direction,map[y][x].value,map);
 			delete_ship(x,y,map);
 
@@ -348,7 +349,7 @@ struct tile_t** create_map(int player){
 
 
 
-struct tile_t** random_map(int player){
+struct tile_t** random_map(int player,int mode){
 	pl = player;
 	if (pl==1) {ships_A=malloc(10*sizeof(struct ship_t));}
 	else {ships_B=malloc(10*sizeof(struct ship_t));}
@@ -357,12 +358,12 @@ struct tile_t** random_map(int player){
 	int x, y, dir, shipcount = 10, currship = 9, emergency_reset = 0;
 	char directions_help [5] = {'l', 'r', 'u', 'd'};
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
+	srand(time(NULL));
 	while (shipcount>0){
 		x = rand() % 10;
 		y = rand() % 10;
 		dir = rand() % 4;
-		printf("x=%d y=%d dir=%c\n", x, y, directions_help[dir]);
-		if(is_suitable(x, y, directions_help[dir], ships[currship], map)==1){
+		if(is_suitable(x, y, directions_help[dir], ships[currship], map, 1)==1){
 			place_ship(x, y, directions_help[dir], ships[currship], map);
 			shipcount --;
 			currship--;
@@ -371,8 +372,8 @@ struct tile_t** random_map(int player){
 		emergency_reset ++;
 	}
 	if (emergency_reset>5000){
-		return random_map(player);}
-	print_map(map);
+		return random_map(player, mode);}
+	if(pl!=2&&mode!=1){print_map(map);}
 	
 	return map;
 }
