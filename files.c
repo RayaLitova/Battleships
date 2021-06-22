@@ -2,8 +2,8 @@
 
 extern struct tile_t **map_A_base;
 extern struct tile_t **map_B_base;
-extern struct ship_t *ships_A;
-extern struct ship_t *ships_B;
+extern struct ship_t ships_A[10];
+extern struct ship_t ships_B[10];
 extern int ship_count;
 
 
@@ -88,8 +88,7 @@ struct tile_t** load_template(int player){
 			fscanf(fp, "%d", &temp_y);
 			fscanf(fp, " %c", &temp_dir);
 			fscanf(fp, "%d", &temp_type);
-			ships_A=malloc(ship_count*sizeof(struct ship_t));
-			place_ship(temp_x, temp_y, temp_dir, temp_type, map_A_base);
+			place_ship(temp_x, temp_y, temp_dir, temp_type, map);
 		}
 	}
 	else{
@@ -108,8 +107,7 @@ struct tile_t** load_template(int player){
 			fscanf(fp, "%d", &temp_y);
 			fscanf(fp, " %c", &temp_dir);
 			fscanf(fp, "%d", &temp_type);
-			ships_B=malloc(ship_count*sizeof(struct ship_t));
-			place_ship(temp_x, temp_y, temp_dir, temp_type, map_B_base);
+			place_ship(temp_x, temp_y, temp_dir, temp_type, map);
 		}
 	}
 	

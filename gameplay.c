@@ -1,8 +1,9 @@
 #include "defines.h"
 
-extern struct ship_t *ships_A;
-extern struct ship_t *ships_B;
+extern struct ship_t ships_A[10];
+extern struct ship_t ships_B[10];
 extern int sizeA, sizeB; 
+extern int mode, is_hard;
 
 struct tile_t **map_A_base;
 struct tile_t **map_B_base;
@@ -36,7 +37,7 @@ struct tile_t** surround_ship(int x, int y, char direction, int type, struct til
 						map[y-dirx][x-dirx].symbol='O';
 						map[y-dirx][x-dirx].value=1;
 					}
-					if(y>=0 && y<=9){ //zashto nqma proverka?!?!?!??!??!
+					if(y>=0 && y<=9){ 
 						map[y][x-dirx].symbol='O';
 						map[y][x-dirx].value=1;
 					}
@@ -66,10 +67,18 @@ struct tile_t** surround_ship(int x, int y, char direction, int type, struct til
 				if(i==type-1) diry*=-1;
 			}
 		}
-		map[y+dirx][x+diry].symbol='O';
-		map[y+dirx][x+diry].value=1;
-		map[y-dirx][x-diry].symbol='O';
-		map[y-dirx][x-diry].value=1;
+		if(y+dirx>=0 && y+dirx<=9){
+			if(x+diry>=0 && x+diry<=9){
+				map[y+dirx][x+diry].symbol='O';
+				map[y+dirx][x+diry].value=1;
+			}
+		}
+		if(y-dirx>=0 && y-dirx<=9){
+			if(x-diry>=0 && x-diry<=9){
+				map[y-dirx][x-diry].symbol='O';
+				map[y-dirx][x-diry].value=1;
+			}
+		}
 		x+=dirx;
 		y+=diry;
 	}
@@ -110,20 +119,31 @@ int check_ship(int x, int y){
 	}
 }
 
+
+int min(int a, int b){
+	if(a>b) return b;
+	return a;
+}
+
+int max(int a, int b){
+	if(a>b) return a;
+	return b;
+}
+
+
 struct ship_t *find_ship(int x, int y){
 	if(turn==2){
-		
 		for(int i=0;i<sizeA;i++){
-			if(x>=ships_A[i].startx && x<=ships_A[i].endx){
-				if(y>=ships_A[i].starty && y<=ships_A[i].endy){
+			if(x>=min(ships_A[i].startx,ships_A[i].endx) && x<=max(ships_A[i].startx,ships_A[i].endx)){
+				if(y>=min(ships_A[i].starty,ships_A[i].endy) && y<=max(ships_A[i].starty,ships_A[i].endy)){
 					return &ships_A[i];
 				}
 			}
 		}
 	}else{
 		for(int i=0;i<sizeB;i++){
-			if(x>=ships_B[i].startx && x<=ships_B[i].endx){
-				if(y>=ships_B[i].starty && y<=ships_B[i].endy){
+			if(x>=min(ships_B[i].startx,ships_B[i].endx) && x<=max(ships_B[i].startx,ships_B[i].endx)){
+				if(y>=min(ships_B[i].starty,ships_B[i].endy) && y<=max(ships_B[i].starty,ships_B[i].endy)){
 					return &ships_B[i];
 				}
 			}
@@ -135,6 +155,8 @@ struct ship_t *find_ship(int x, int y){
 
 void win(){
 	printf("The winner is player %d!\n", turn);
+	if(mode==1 && is_hard && turn==2) printf("GG 2 EZ <3\n");
+	if(mode==1 && is_hard && turn!=2) printf("Why u hacking bro :'((\n");
 }
 
 void fire_last(){
@@ -148,11 +170,11 @@ void fire_last(){
 	if(turn==1){
 		if(direction=='r'){
 			last_fire_Ax++;
-			if(last_fire_Ax>10){
+			if(last_fire_Ax>=9){
 				printf("You're going out of course!");
 				return;
 			}
-			while(map_A[last_fire_Ax][last_fire_Ay].value>0) last_fire_Ax++;
+			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ax++;
     		fire(last_fire_Ax,last_fire_Ay);
     	}
 	    if(direction=='l'){
@@ -166,7 +188,7 @@ void fire_last(){
 	    }
 	    if(direction=='d'){
 	    	last_fire_Ay++;
-	    	if(last_fire_Ay>10){
+	    	if(last_fire_Ay>=9){
 				printf("You're going out of course!");
 				return;
 			}
@@ -187,11 +209,11 @@ void fire_last(){
 		
 		if(direction=='r'){
 			last_fire_Bx++;
-			if(last_fire_Bx>10){
+			if(last_fire_Bx>=9){
 				printf("You're going out of course!");
 				return;
 			}
-			while(map_B[last_fire_Bx][last_fire_By].value>0) last_fire_Bx++;
+			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx++;
     		fire(last_fire_Bx,last_fire_By);
     	}
 	    if(direction=='l'){
@@ -205,7 +227,7 @@ void fire_last(){
 	    }
 	    if(direction=='d'){
 	    	last_fire_By++;
-	    	if(last_fire_By>10){
+	    	if(last_fire_By>=9){
 				printf("You're going out of course!");
 				return;
 			}
@@ -235,32 +257,31 @@ void fire(int x, int y){
 
 			map_A[y][x].value=map_B_base[y][x].value;
 			map_A[y][x].symbol='X';
-
 			struct ship_t *temp=find_ship(x,y);
 			temp->hit++;
 			if(check_ship(x,y)){
 				printf("The ship has been sunken!\n");
 				ships_left_A--;
 				if(ships_left_A==0){
-					printf("aa\n");
 					win();
 					return;
 				}
-				//map_A=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_A);
+				map_A=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_A);
 			}
 		}else{
+
 			printf("No ships were hit! :(\n");
 			map_A[y][x].value=1;
 			map_A[y][x].symbol='O';
 			turn=2;
-			//system("clear");
+			system("clear");
 		}
 		last_fire_Ax=x;
 		last_fire_Ay=y;
 
 	}else if(turn==2){
 		if(map_B[y][x].value>0){
-			printf("This place is already on fire!");
+			if(mode!=1 && !is_hard) printf("This place is already on fire!");
 			return;
 		}
 		if(map_A_base[y][x].value>1){
@@ -279,14 +300,13 @@ void fire(int x, int y){
 					win();
 					return;
 				}
-				//map_B=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_B);
+				map_B=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_B);
 			}
 		}else{
-			printf("No ships were hit! :(\n");
+			if(mode!=1 && !is_hard) printf("No ships were hit! :(\n"), system("clear");
 			map_B[y][x].value=1;
 			map_B[y][x].symbol='O';
 			turn=1;
-			//system("clear");
 		}
 		last_fire_Bx=x;
 		last_fire_By=y;

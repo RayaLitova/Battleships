@@ -1,8 +1,8 @@
 #include "defines.h"
 
 
-struct ship_t *ships_A;
-struct ship_t *ships_B;
+struct ship_t ships_A[10];
+struct ship_t ships_B[10];
 int sizeA=0, sizeB=0;
 int pl;
 const int ship_count=10;
@@ -186,7 +186,7 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map){
             map[y][chx].value=type;
             map[y][chx].symbol='X';
         }
-        ships_change(x,y,type,x-type-1,y,direction);
+        ships_change(x,y,type,x-type+1,y,direction);
     }
     if(direction=='d'){
         for(int chy=y;chy<y+type;chy++){
@@ -200,7 +200,7 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map){
             map[chy][x].value=type;
             map[chy][x].symbol='X';
         }
-        ships_change(x,y,type,x,y-type-1,direction);
+        ships_change(x,y,type,x,y-type+1,direction);
     }
 }
 
@@ -260,8 +260,6 @@ int check_ship_a(int x, int y, struct tile_t** map){
 
 struct tile_t** create_map(int player){
 	pl=player;
-	ships_A=malloc(ship_count*sizeof(struct ship_t));
-	ships_B=malloc(ship_count*sizeof(struct ship_t));
 	struct tile_t **map=create_empty_map();
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
 	int shipcount = 10, currship = 0, flag = 0, x=0, y=0, deffence=0;
@@ -347,12 +345,8 @@ struct tile_t** create_map(int player){
 }
 
 
-
-
 struct tile_t** random_map(int player,int mode){
 	pl = player;
-	if (pl==1) {ships_A=malloc(10*sizeof(struct ship_t));}
-	else {ships_B=malloc(10*sizeof(struct ship_t));}
 	struct tile_t **map=create_empty_map();
 	printf("Generating random map, please wait\n");
 	int x, y, dir, shipcount = 10, currship = 9, emergency_reset = 0;
@@ -372,8 +366,10 @@ struct tile_t** random_map(int player,int mode){
 		emergency_reset ++;
 	}
 	if (emergency_reset>5000){
-		return random_map(player, mode);}
-	if(pl!=2&&mode!=1){print_map(map);}
-	
+		random_map(player, mode);
+		return 0;
+	}
+	if(pl!=2 || mode!=1){print_map(map);}
+
 	return map;
 }

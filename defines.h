@@ -9,5 +9,6 @@
 #include "gameplay.h"
 #include "files.h"
 #include <time.h>
+#include "game_start.h"
 
 #endif
