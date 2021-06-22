@@ -8,6 +8,6 @@
 #include "map_create.h"
 #include "gameplay.h"
 #include "files.h"
-
+#include <time.h>
 
 #endif

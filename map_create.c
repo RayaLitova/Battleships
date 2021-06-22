@@ -1,5 +1,5 @@
 #include "defines.h"
-#include <time.h>
+
 
 struct ship_t *ships_A;
 struct ship_t *ships_B;
