@@ -44,18 +44,30 @@ void save_template(int player){
 
 void call_sf(int player){
 	char ans;
+	
 	printf("Do you want to save this as a template?");
 	scanf(" %c", &ans);
+	while(ans!='y' && ans!='n'){
+		printf("Invalid input. Choose y/n.\n");
+		printf("Do you want to save this as a template?");
+		scanf(" %c", &ans);
+		if(ans == 'y'){
+			save_template(player);
+		}
+		else if(ans == 'n'){
+			break;
+		}
+	}
 	if(ans == 'y'){
 		save_template(player);
 	}
+	
 }
 
 
 
 struct tile_t** load_template(int player){
 	struct tile_t  **map=create_empty_map();
-	//load from {player} file
 	
 	FILE *fp;
 	
