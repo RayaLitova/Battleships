@@ -222,9 +222,7 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map){
 }
 
 void delete_ship(struct ship_t* ship, struct tile_t** map){
-	printf("%d\n", ship->type);
 	int type = ship->type;
-	printf("%d\n", ship->type);
 	if(ship->startx!=9){
 		if(map[ship->starty][ship->startx+1].value!=0){
 			for(int hx=ship->startx;hx<ship->startx+type;hx++){
@@ -241,9 +239,7 @@ void delete_ship(struct ship_t* ship, struct tile_t** map){
 			}
 		}
 	}
-	printf("starty %d\n",ship->starty);
 	if(ship->starty!=9){
-		printf("starty %d\n",ship->starty);
 		if(map[ship->starty+1][ship->startx].value!=0){
 			for(int hy=ship->starty;hy<ship->starty+type;hy++){
 				map[hy][ship->startx].value = 0;

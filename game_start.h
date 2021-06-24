@@ -9,6 +9,7 @@ void choose_map(int player);
 
 void game_start();
 
+void clear();
 
 
 #endif

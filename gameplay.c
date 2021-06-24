@@ -274,7 +274,7 @@ void fire(int x, int y){
 			map_A[y][x].value=1;
 			map_A[y][x].symbol='O';
 			turn=2;
-			system("clear");
+			clear();
 		}
 		last_fire_Ax=x;
 		last_fire_Ay=y;
@@ -303,7 +303,7 @@ void fire(int x, int y){
 				map_B=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_B);
 			}
 		}else{
-			if(mode!=1 && !is_hard) printf("No ships were hit! :(\n"), system("clear");
+			if(mode!=1 && !is_hard) printf("No ships were hit! :(\n"), clear();
 			map_B[y][x].value=1;
 			map_B[y][x].symbol='O';
 			turn=1;

@@ -8,6 +8,14 @@ extern int pl;
 int mode;
 int is_hard;
 
+void clear(){
+	#if defined(_WIN32) || defined(_WIN64)
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
 int choose_difficulty(){
 	printf("Easy(1)\nTooHard(2)\n");
 	int diff;
@@ -20,7 +28,7 @@ int choose_difficulty(){
 
 
 void choose_map(int player){
-	system("clear");
+	clear();
 	printf("Player %d:\n", player);
 	printf("Create map(1)\nLoad template(2)\nRandom map(3)\n");
 	int map;
