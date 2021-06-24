@@ -5,7 +5,7 @@ struct tile_t** surround_ship(int x, int y, char direction, int type, struct til
 
 int check_ship(int x, int y);
 
-struct ship_t *find_ship(int x, int y, int trun);
+struct ship_t *find_ship(int x, int y, int trunn);
 
 void play();
 

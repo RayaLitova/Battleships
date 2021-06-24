@@ -68,6 +68,8 @@ void call_sf(int player){
 
 struct tile_t** load_template(int player){
 	struct tile_t  **map=create_empty_map();
+	if(player==1)fill_ships(ships_A);
+	else fill_ships(ships_B);
 	
 	FILE *fp;
 	

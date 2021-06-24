@@ -380,6 +380,8 @@ struct tile_t** create_map(int player){
 struct tile_t** random_map(int player,int mode){
 	pl = player;
 	struct tile_t **map=create_empty_map();
+	if(pl==1)fill_ships(ships_A);
+	else fill_ships(ships_B);
 	printf("Generating random map, please wait\n");
 	int x, y, dir, shipcount = 10, currship = 9, emergency_reset = 0;
 	char directions_help [5] = {'l', 'r', 'u', 'd'};

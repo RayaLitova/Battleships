@@ -36,6 +36,8 @@ void delete_ship(struct ship_t* ship,  struct tile_t** map);
 
 int check_ship_a(int x, int y, struct tile_t** map);
 
+void fill_ships(struct ship_t* ships);
+
 struct tile_t ** create_map(int player);
 
 struct tile_t** random_map(int player, int mode);
