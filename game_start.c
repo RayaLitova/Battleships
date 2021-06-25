@@ -84,6 +84,7 @@ void choose_map(int player){
 		printf("Invalid option\n");
 		choose_map(player);
 	};
+	clear();
 }
 
 void game_start(){

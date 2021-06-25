@@ -7,9 +7,11 @@ int sizeA=0, sizeB=0;
 int pl;
 const int ship_count=10;
 
-void fill_ships(struct ship_t* ships){
+void fill_ships(int player){
+	pl=player;
 	for(int i=0; i<10; i++){
-		ships[i].type=1;
+		if(player==1) ships_A[i].type=1;
+		else ships_B[i].type=1;
 	}
 }
 
@@ -218,6 +220,7 @@ void place_ship(int x, int y, char direction, int type, struct tile_t** map){
             map[chy][x].symbol='X';
         }
         ships_change(x,y,type,x,y-type+1,direction);
+
     }
 }
 
@@ -283,8 +286,7 @@ struct tile_t** create_map(int player){
 	int ships[10] = {2, 2, 2, 2, 3, 3, 3, 4, 4, 6};
 	int shipcount = 10, currship = 0, flag = 0, x=0, y=0, deffence=0;
 	char direction;
-	if(pl==1)fill_ships(ships_A);
-	else fill_ships(ships_B);
+	fill_ships(player);
 
 
 	for(int go=0;go!=4;){
@@ -380,8 +382,7 @@ struct tile_t** create_map(int player){
 struct tile_t** random_map(int player,int mode){
 	pl = player;
 	struct tile_t **map=create_empty_map();
-	if(pl==1)fill_ships(ships_A);
-	else fill_ships(ships_B);
+	fill_ships(player);
 	printf("Generating random map, please wait\n");
 	int x, y, dir, shipcount = 10, currship = 9, emergency_reset = 0;
 	char directions_help [5] = {'l', 'r', 'u', 'd'};

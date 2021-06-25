@@ -91,7 +91,7 @@ void play(){
 	map_A=create_empty_map();
 	map_B=create_empty_map();
 	int shoot=0;
-	while(1){
+	while(turn){
 		printf("\nPlayer %d:\n", turn);
 		if(turn == 1) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ax+'A',last_fire_Ay+1);
 		if(turn == 2) printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Bx+'A',last_fire_By+1);
@@ -157,6 +157,14 @@ void win(){
 	printf("The winner is player %d!\n", turn);
 	if(mode==1 && is_hard && turn==2) printf("GG 2 EZ <3\n");
 	if(mode==1 && is_hard && turn!=2) printf("Why u hacking bro :'((\n");
+	turn=0;
+}
+
+void fix_last(int *x,int *y){
+	if(*x>9) *x-=1;
+	if(*x<0) *x+=1;
+	if(*y>9) *y-=1;
+	if(*y<0) *y+=1;
 }
 
 void fire_last(){
@@ -170,78 +178,142 @@ void fire_last(){
 	if(turn==1){
 		if(direction=='r'){
 			last_fire_Ax++;
-			if(last_fire_Ax>=9){
-				printf("You're going out of course!");
+			if(last_fire_Ax>9){
+				printf("You're going out of course!\n");
+				last_fire_Ax--;
 				return;
 			}
-			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ax++;
-    		fire(last_fire_Ax,last_fire_Ay);
+			while((last_fire_Ax>=0 && last_fire_Ax<=9) && map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ax++;
+    		
+    		if((last_fire_Ay>=0 && last_fire_Ay<=9) && (last_fire_Ax>=0 && last_fire_Ax<=9)){
+	        	fire(last_fire_Ax,last_fire_Ay);
+	        }else{
+	        	fix_last(&last_fire_Ax,&last_fire_Ay);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
     	}
 	    if(direction=='l'){
 	    	last_fire_Ax--;
 	    	if(last_fire_Ax<0){
-				printf("You're going out of course!");
+	    		last_fire_Ax++;
+				printf("You're going out of course!\n");
 				return;
 			}
-			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ax--;
-	        fire(last_fire_Ax,last_fire_Ay);
+			while((last_fire_Ax>=0 && last_fire_Ax<=9) && map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ax--;
+	        
+	        if((last_fire_Ay>=0 && last_fire_Ay<=9) && (last_fire_Ax>=0 && last_fire_Ax<=9)){
+	        	fire(last_fire_Ax,last_fire_Ay);
+	        }else{
+	        	fix_last(&last_fire_Ax,&last_fire_Ay);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
 	    }
 	    if(direction=='d'){
 	    	last_fire_Ay++;
-	    	if(last_fire_Ay>=9){
-				printf("You're going out of course!");
+	    	if(last_fire_Ay>9){
+				printf("You're going out of course!\n");
+				last_fire_Ay--;
 				return;
 			}
-			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay++;
-	        fire(last_fire_Ax,last_fire_Ay);
+			while((last_fire_Ay>=0 && last_fire_Ay<=9) && map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay++;
+
+			if((last_fire_Ay>=0 && last_fire_Ay<=9) && (last_fire_Ax>=0 && last_fire_Ax<=9)){
+	        	fire(last_fire_Ax,last_fire_Ay);
+	        }else{
+	        	fix_last(&last_fire_Ax,&last_fire_Ay);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
 	    }
 	    if(direction=='u'){
 	    	last_fire_Ay--;
 	    	if(last_fire_Ay<0){
-				printf("You're going out of course!");
+	    		last_fire_Ay++;
+				printf("You're going out of course!\n");
 				return;
 			}
-			while(map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay--;
-	        fire(last_fire_Ax,last_fire_Ay);
+			while((last_fire_Ay>=0 && last_fire_Ay<=9) && map_A[last_fire_Ay][last_fire_Ax].value>0) last_fire_Ay--;
+
+	        if((last_fire_Ay>=0 && last_fire_Ay<=9) && (last_fire_Ax>=0 && last_fire_Ax<=9)){
+	        	fire(last_fire_Ax,last_fire_Ay);
+	        }else{
+	        	fix_last(&last_fire_Ax,&last_fire_Ay);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
 	    }
 
 	}else{
 		
 		if(direction=='r'){
 			last_fire_Bx++;
-			if(last_fire_Bx>=9){
-				printf("You're going out of course!");
+			if(last_fire_Bx>9){
+				printf("You're going out of course!\n");
+				last_fire_Bx--;
 				return;
 			}
-			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx++;
-    		fire(last_fire_Bx,last_fire_By);
+			while((last_fire_Bx>=0 && last_fire_Bx<=9) && map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx++;
+    		
+    		if((last_fire_By>=0 && last_fire_By<=9) && (last_fire_Bx>=0 && last_fire_Bx<=9)){
+	        	fire(last_fire_Bx,last_fire_By);
+	        }else{
+	        	fix_last(&last_fire_Bx,&last_fire_By);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
     	}
 	    if(direction=='l'){
 	    	last_fire_Bx--;
 	    	if(last_fire_Bx<0){
-				printf("You're going out of course!");
+	    		last_fire_Bx++;
+				printf("You're going out of course!\n");
 				return;
 			}
-			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx--;
-	        fire(last_fire_Bx,last_fire_By);
+			while((last_fire_Bx>=0 && last_fire_Bx<=9) && map_B[last_fire_By][last_fire_Bx].value>0) last_fire_Bx--;
+	        
+	        if((last_fire_By>=0 && last_fire_By<=9) && (last_fire_Bx>=0 && last_fire_Bx<=9)){
+	        	fire(last_fire_Bx,last_fire_By);
+	        }else{
+	        	fix_last(&last_fire_Bx,&last_fire_By);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
 	    }
 	    if(direction=='d'){
 	    	last_fire_By++;
-	    	if(last_fire_By>=9){
-				printf("You're going out of course!");
+	    	if(last_fire_By>9){
+				printf("You're going out of course!\n");
+				last_fire_By--;
 				return;
 			}
-			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By++;
-	        fire(last_fire_Bx,last_fire_By);
+			while((last_fire_By>=0 && last_fire_By<=9) && map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By++;
+
+			if((last_fire_By>=0 && last_fire_By<=9) && (last_fire_Bx>=0 && last_fire_Bx<=9)){
+	        	fire(last_fire_Bx,last_fire_By);
+	        }else{
+	        	fix_last(&last_fire_Bx,&last_fire_By);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
 	    }
 	    if(direction=='u'){
 	    	last_fire_By--;
 	    	if(last_fire_By<0){
-				printf("You're going out of course!");
+	    		last_fire_By++;
+				printf("You're going out of course!\n");
 				return;
 			}
-			while(map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By--;
-	        fire(last_fire_Bx,last_fire_By);
+			while((last_fire_By>=0 && last_fire_By<=9) && map_B[last_fire_By][last_fire_Bx].value>0) last_fire_By--;
+
+	        if((last_fire_By>=0 && last_fire_By<=9) && (last_fire_Bx>=0 && last_fire_Bx<=9)){
+	        	fire(last_fire_Bx,last_fire_By);
+	        }else{
+	        	fix_last(&last_fire_Bx,&last_fire_By);
+	        	printf("You're going out of course!\n");
+	        	return;
+	        }
 	    }
 	}
 }
@@ -249,7 +321,7 @@ void fire_last(){
 void fire(int x, int y){
 	if(turn==1){
 		if(map_A[y][x].value>0){
-			printf("This place is already on fire!");
+			printf("This place is already on fire!\n");
 			return;
 		}
 		if(map_B_base[y][x].value>1){
@@ -274,18 +346,18 @@ void fire(int x, int y){
 			map_A[y][x].value=1;
 			map_A[y][x].symbol='O';
 			turn=2;
-			clear();
 		}
 		last_fire_Ax=x;
 		last_fire_Ay=y;
 
 	}else if(turn==2){
 		if(map_B[y][x].value>0){
-			if(mode!=1 && !is_hard) printf("This place is already on fire!");
+			if(mode!=1 && !is_hard) printf("This place is already on fire!\n");
 			return;
 		}
 		if(map_A_base[y][x].value>1){
-			printf("A ship was hit!\n");
+			if(mode==1) printf("Your ship was hit!\n");
+			else printf("A ship was hit!\n");
 
 			map_B[y][x].value=map_A_base[y][x].value;
 			map_B[y][x].symbol='X';
@@ -295,6 +367,7 @@ void fire(int x, int y){
 
 			if(check_ship(x,y)){
 				printf("The ship has been sunken!\n");
+				if(mode==1 && !is_hard) print_map(map_B);
 				ships_left_B--;
 				if(ships_left_B==0){
 					win();
@@ -303,7 +376,7 @@ void fire(int x, int y){
 				map_B=surround_ship(temp->startx, temp->starty, temp->direction, temp->type, map_B);
 			}
 		}else{
-			if(mode!=1 && !is_hard) printf("No ships were hit! :(\n"), clear();
+			if(mode!=1 && !is_hard) printf("No ships were hit! :(\n");
 			map_B[y][x].value=1;
 			map_B[y][x].symbol='O';
 			turn=1;
@@ -335,7 +408,7 @@ void easy_mode(){
 	map_A=create_empty_map();
 	map_B=create_empty_map();
 	int shoot=0, j, k;
-	while(1){
+	while(turn){
 		if(turn==1){
 			printf("\nPlayer %d:\n", turn);
 			printf("Fire at specified position(1)\nFire at last position - %c%d (2)\nSee map(3)\n", last_fire_Ax+'A',last_fire_Ay+1);
