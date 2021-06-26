@@ -64,8 +64,8 @@ void position_ship(int* x, int* y, char* direction){
 	do{
 		printf("Choose direction Up(u), Down(d), Left(l), Right(r) ");
 		scanf(" %c", direction);
-		if(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r') printf("No such direction\n");
-	}while(*direction!='d' && *direction!='u' && *direction!='l' && *direction!='r');
+		if(*direction!='d' && *direction!='D'&& *direction!='u' && *direction!='U' && *direction!='l' && *direction!='L' && *direction!='r' && *direction!='R') printf("No such direction\n");
+	}while(*direction!='d' && *direction!='D'&& *direction!='u' && *direction!='U' && *direction!='l' && *direction!='L' && *direction!='r' && *direction!='R');
 }
 
 void ships_change(int x, int y, int type, int endx, int endy, char direction){
@@ -105,11 +105,11 @@ void ships_change(int x, int y, int type, int endx, int endy, char direction){
 
 int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int random_flag ){
 	int chy, chx, maxY, maxX;
-	if((direction=='r'&& x>9-type+1)||(direction=='l'&& x<0+type-1)||(direction=='u'&& y<0+type-1)||(direction=='d'&& y>9-type+1)) {
+	if(((direction=='r'||direction == 'R')&& x>9-type+1)||((direction=='l'||direction=='L')&& x<0+type-1)||((direction=='u'||direction=='U')&& y<0+type-1)||((direction=='d'||direction=='D')&& y>9-type+1)) {
 		if(random_flag==0){printf("You going out of course! Redirect the ship!\n");}
 		return 0;
 	}
-	if(direction=='r'){
+	if(direction=='r'||direction == 'R'){
 		if(x==0)chx=x;
 		else chx=x-1;
 		if(y==0)chy=y;
@@ -129,7 +129,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int
 			else chy=y-1;
 		}
 	}
-	if(direction=='l'){
+	if(direction=='l'||direction=='L'){
 		if(x==9)chx=x;
 		else chx=x+1;
 		if(y==0)chy=y;
@@ -149,7 +149,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int
 			else chy=y-1;
 		}
 	}
-	if(direction=='d'){
+	if(direction=='d'||direction=='D'){
 		if(x==0)chx=x;
 		else chx=x-1;
 		if(y==0)chy=y;
@@ -169,7 +169,7 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int
 			else chy=y-1;
 		}
 	}
-	if(direction=='u'){
+	if(direction=='u'||direction=='U'){
 		if(x==0)chx=x;
 		else chx=x-1;
 		if(y==9)chy=y;
@@ -193,28 +193,28 @@ int is_suitable(int x, int y, char direction, int type, struct tile_t** map, int
 }
 
 void place_ship(int x, int y, char direction, int type, struct tile_t** map){
-    if(direction=='r'){
+    if(direction=='r'||direction == 'R'){
         for(int chx=x;chx<x+type;chx++){
             map[y][chx].value=type;
             map[y][chx].symbol='X';
         }
         ships_change(x,y,type,x+type-1,y,direction);
     }
-    if(direction=='l'){
+    if(direction=='l'||direction=='L'){
         for(int chx=x;chx>x-type;chx--){
             map[y][chx].value=type;
             map[y][chx].symbol='X';
         }
         ships_change(x,y,type,x-type+1,y,direction);
     }
-    if(direction=='d'){
+    if(direction=='d'||direction=='D'){
         for(int chy=y;chy<y+type;chy++){
             map[chy][x].value=type;
             map[chy][x].symbol='X';
         }
         ships_change(x,y,type,x,y+type-1,direction);
     }
-    if(direction=='u'){
+    if(direction=='u'||direction=='U'){
         for(int chy=y;chy>y-type;chy--){
             map[chy][x].value=type;
             map[chy][x].symbol='X';
@@ -308,7 +308,7 @@ struct tile_t** create_map(int player){
 			printf("Choose ship type(2,3,4,6) ");
 			scanf("%d",&currship);
 			for(int i=0; i<10;i++){
-				if(currship==ships[i]){
+				if(currship==ships[i]&&currship!=1){
 					flag = 1;
 					break;
 				}
