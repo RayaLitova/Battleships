@@ -402,7 +402,7 @@ struct tile_t** random_map(int player,int mode){
 	}
 	if (emergency_reset>5000){
 		random_map(player, mode);
-		return 0;
+		return create_empty_map();
 	}
 	if(pl!=2 || mode!=1){print_map(map);}
 
